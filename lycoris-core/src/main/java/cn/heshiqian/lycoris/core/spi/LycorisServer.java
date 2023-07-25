@@ -1,4 +1,4 @@
-package cn.heshiqian.lycoris.core;
+package cn.heshiqian.lycoris.core.spi;
 
 import cn.heshiqian.lycoris.core.session.Session;
 
@@ -14,6 +14,8 @@ public interface LycorisServer {
     void start();
 
     void shutdown();
+
+    String getServerName();
 
     void onConnect(Session session);
 
