@@ -17,11 +17,6 @@ public interface LycorisServer {
 
     String getServerName();
 
-    void onConnect(Session session);
+    void setChannel(LycorisChannel channel);
 
-    void onDisconnect(Session session);
-
-    void onMessage(Session session);
-
-    void onError(Session session);
 }

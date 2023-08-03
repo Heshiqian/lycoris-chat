@@ -4,8 +4,10 @@ import cn.heshiqian.lycoris.core.exception.NotAvailableServerException;
 import cn.heshiqian.lycoris.core.message.Message;
 import cn.heshiqian.lycoris.core.message.MessageType;
 import cn.heshiqian.lycoris.core.message.Messenger;
+import cn.heshiqian.lycoris.core.properties.ManagerConfig;
 import cn.heshiqian.lycoris.core.server.DefaultLycorisServerManager;
 import cn.heshiqian.lycoris.core.session.Session;
+import cn.heshiqian.lycoris.core.spi.LycorisChannel;
 import cn.heshiqian.lycoris.core.spi.LycorisServer;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
@@ -13,6 +15,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -71,9 +74,33 @@ public class LycorisTest {
     }
 
     @Test
+    public void testLycorisPropertyCanLoadCorrect() {
+        Properties properties = new Properties();
+        properties.setProperty(ManagerConfig.PROP_KEY_TARGET_SERVER, "LoadFromProperty");
+
+        // 1. load from property
+        ManagerConfig loadProperty = new ManagerConfig();
+        loadProperty.load(properties);
+
+        Assertions.assertNotNull(loadProperty.get(ManagerConfig.PROP_KEY_TARGET_SERVER));
+        Assertions.assertEquals(loadProperty.get(ManagerConfig.PROP_KEY_TARGET_SERVER), "LoadFromProperty");
+
+        // 2. load from string
+        String propertyStr = ManagerConfig.PROP_KEY_TARGET_SERVER + "=LoadFromString";
+        ManagerConfig loadString = new ManagerConfig();
+        loadString.load(propertyStr);
+
+        Assertions.assertNotNull(loadString.get(ManagerConfig.PROP_KEY_TARGET_SERVER));
+        Assertions.assertEquals(loadString.get(ManagerConfig.PROP_KEY_TARGET_SERVER), "LoadFromString");
+
+    }
+
+    @Test
     public void testLycorisServerManagerCanInstanceSomeServer() {
-        Properties managerConfig = new Properties();
-        managerConfig.setProperty(DefaultLycorisServerManager.PROP_KEY_TARGET_SERVER, "cn.heshiqian.lycoris.LycorisTest$TestLycorisServer");
+        Properties properties = new Properties();
+        properties.setProperty(ManagerConfig.PROP_KEY_TARGET_SERVER, "cn.heshiqian.lycoris.LycorisTest$TestLycorisServer");
+        ManagerConfig managerConfig = new ManagerConfig();
+        managerConfig.load(properties);
 
         // 1. test all default.
         DefaultLycorisServerManager defaultLycorisServerManager = new DefaultLycorisServerManager(null);
@@ -176,23 +203,9 @@ public class LycorisTest {
         }
 
         @Override
-        public void onConnect(Session session) {
+        public void setChannel(LycorisChannel channel) {
 
         }
 
-        @Override
-        public void onDisconnect(Session session) {
-
-        }
-
-        @Override
-        public void onMessage(Session session) {
-
-        }
-
-        @Override
-        public void onError(Session session) {
-
-        }
     }
 }

@@ -1,6 +1,7 @@
 package cn.heshiqian.lycoris.core.server;
 
 import cn.heshiqian.lycoris.core.exception.NotAvailableServerException;
+import cn.heshiqian.lycoris.core.properties.ManagerConfig;
 import cn.heshiqian.lycoris.core.spi.LycorisServer;
 
 import java.util.*;
@@ -12,14 +13,12 @@ import java.util.*;
  */
 public class DefaultLycorisServerManager extends AbstractLycorisServerManager{
 
-    public static final String PROP_KEY_TARGET_SERVER = "lycoris.server.class";
-
-    private final Properties managerConfig;
+    private final ManagerConfig managerConfig;
     private final List<LycorisServer> serverInstanceList = new ArrayList<>(10);
     private LycorisServer specifiedServer;
 
-    public DefaultLycorisServerManager(Properties managerConfig) {
-        this.managerConfig = managerConfig == null ? new Properties() : managerConfig;
+    public DefaultLycorisServerManager(ManagerConfig managerConfig) {
+        this.managerConfig = managerConfig == null ? new ManagerConfig() : managerConfig;
         discoverAllServerInstance();
     }
 
@@ -64,7 +63,7 @@ public class DefaultLycorisServerManager extends AbstractLycorisServerManager{
         serverInstanceList.addAll(spiDiscover());
 
         // check configuration and load some server.
-        String targetServer = managerConfig.getProperty(PROP_KEY_TARGET_SERVER);
+        String targetServer = managerConfig.get(ManagerConfig.PROP_KEY_TARGET_SERVER, () -> null, String.class);
         if (targetServer != null && targetServer.trim().length() != 0) {
             LycorisServer lycorisServer = checkAndLoadClassFromClassName(targetServer);
             if (lycorisServer != null) {

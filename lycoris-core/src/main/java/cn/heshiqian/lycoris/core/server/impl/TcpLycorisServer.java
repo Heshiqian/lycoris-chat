@@ -2,7 +2,7 @@ package cn.heshiqian.lycoris.core.server.impl;
 
 import cn.heshiqian.lycoris.core.server.BasicProtocol;
 import cn.heshiqian.lycoris.core.server.NetworkLycorisServer;
-import cn.heshiqian.lycoris.core.session.Session;
+import cn.heshiqian.lycoris.core.spi.LycorisChannel;
 
 /**
  * @author Heshiqian
@@ -31,22 +31,8 @@ public class TcpLycorisServer extends NetworkLycorisServer {
     }
 
     @Override
-    public void onConnect(Session session) {
+    public void setChannel(LycorisChannel channel) {
 
     }
 
-    @Override
-    public void onDisconnect(Session session) {
-
-    }
-
-    @Override
-    public void onMessage(Session session) {
-
-    }
-
-    @Override
-    public void onError(Session session) {
-
-    }
 }

@@ -1,5 +1,6 @@
 package cn.heshiqian.lycoris.core.server;
 
+import cn.heshiqian.lycoris.core.channel.ChannelTerminal;
 import cn.heshiqian.lycoris.core.spi.LycorisServer;
 
 /**
@@ -15,6 +16,8 @@ public abstract class NetworkLycorisServer implements LycorisServer {
         this.protocol = protocol;
     }
 
-
+    public Protocol getProtocol() {
+        return protocol;
+    }
 
 }
