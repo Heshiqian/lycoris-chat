@@ -1,6 +1,5 @@
 package cn.heshiqian.lycoris.core.channel.impl;
 
-import cn.heshiqian.lycoris.core.channel.AbstractChannelWorker;
 import cn.heshiqian.lycoris.core.channel.ChannelWorker;
 
 /**
