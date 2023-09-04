@@ -25,6 +25,11 @@ public abstract class AbstractLycorisProperty implements LycorisProperty{
 
     protected abstract void initDefault();
 
+    @Override
+    public void load(String configStr) {
+        load(loadFromString(configStr));
+    }
+
     protected Properties loadFromString(String propertyString) {
         try {
             Properties properties = new Properties();

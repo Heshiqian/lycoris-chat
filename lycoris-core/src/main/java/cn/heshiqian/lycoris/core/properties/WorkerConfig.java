@@ -39,9 +39,4 @@ public class WorkerConfig extends AbstractLycorisProperty{
         }, () -> DEFAULT_TIMEOUT));
     }
 
-    @Override
-    public void load(String configStr) {
-        load(loadFromString(configStr));
-    }
-
 }

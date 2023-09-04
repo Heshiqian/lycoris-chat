@@ -1,4 +1,4 @@
-package cn.heshiqian.lycoris.core.spi;
+package cn.heshiqian.lycoris.core.channel;
 
 import cn.heshiqian.lycoris.core.channel.ChannelTerminal;
 

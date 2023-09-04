@@ -1,7 +1,5 @@
 package cn.heshiqian.lycoris.core.channel;
 
-import cn.heshiqian.lycoris.core.spi.LycorisChannel;
-
 /**
  * @author Heshiqian
  * @version 1.0.0

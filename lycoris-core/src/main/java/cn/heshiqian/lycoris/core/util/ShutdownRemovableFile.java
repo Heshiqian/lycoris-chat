@@ -7,7 +7,7 @@ import java.io.File;
  * @version 1.0.0
  * @since 2023/8/11
  */
-public final class ShutdownRemovableFile extends File{
+public final class ShutdownRemovableFile extends File {
 
     private final File originalFile;
 

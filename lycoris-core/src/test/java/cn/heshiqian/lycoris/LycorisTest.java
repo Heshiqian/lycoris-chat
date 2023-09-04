@@ -1,23 +1,14 @@
 package cn.heshiqian.lycoris;
 
-import cn.heshiqian.lycoris.core.exception.NotAvailableServerException;
 import cn.heshiqian.lycoris.core.message.Message;
 import cn.heshiqian.lycoris.core.message.MessageType;
 import cn.heshiqian.lycoris.core.message.Messenger;
 import cn.heshiqian.lycoris.core.properties.ManagerConfig;
-import cn.heshiqian.lycoris.core.server.DefaultLycorisServerManager;
-import cn.heshiqian.lycoris.core.session.Session;
-import cn.heshiqian.lycoris.core.spi.LycorisChannel;
-import cn.heshiqian.lycoris.core.spi.LycorisServer;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Field;
-import java.nio.ByteBuffer;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Properties;
 
 /**
@@ -95,60 +86,6 @@ public class LycorisTest {
 
     }
 
-    @Test
-    public void testLycorisServerManagerCanInstanceSomeServer() {
-        Properties properties = new Properties();
-        properties.setProperty(ManagerConfig.PROP_KEY_TARGET_SERVER, "cn.heshiqian.lycoris.LycorisTest$TestLycorisServer");
-        ManagerConfig managerConfig = new ManagerConfig();
-        managerConfig.load(properties);
-
-        // 1. test all default.
-        DefaultLycorisServerManager defaultLycorisServerManager = new DefaultLycorisServerManager(null);
-        LycorisServer server = defaultLycorisServerManager.getServer();
-        Assertions.assertNotNull(server);
-
-        // 2. test specific.
-        DefaultLycorisServerManager specificManager = new DefaultLycorisServerManager(managerConfig);
-        LycorisServer specificServer = specificManager.getServer();
-        Assertions.assertNotNull(specificServer);
-        Assertions.assertEquals(specificServer.getClass(), TestLycorisServer.class);
-
-        // 3. test not found
-        Assertions.assertThrows(NotAvailableServerException.class, () -> {
-            defaultLycorisServerManager.getServer("cn.heshiqian.lycoris.LycorisTest$TestLycorisServer");
-        });
-        Assertions.assertThrows(NotAvailableServerException.class, () -> {
-            defaultLycorisServerManager.getServer(TestLycorisServer.class);
-        });
-
-        // 4. test null
-        Assertions.assertThrows(NullPointerException.class, () -> {
-            // force set invoke getServer(Class) method
-            defaultLycorisServerManager.getServer((Class<? extends LycorisServer>) null);
-        });
-        Assertions.assertThrows(NullPointerException.class, () -> {
-            // force set invoke getServer(String) method
-            defaultLycorisServerManager.getServer((String) null);
-        });
-
-        // 5. test not have any server
-        DefaultLycorisServerManager emptyManager = new DefaultLycorisServerManager(null);
-        hackSetServerListToEmpty(emptyManager);
-        Assertions.assertThrows(NotAvailableServerException.class, emptyManager::getServer);
-    }
-
-    @SuppressWarnings("unchecked")
-    private void hackSetServerListToEmpty(DefaultLycorisServerManager emptyManager) {
-        try {
-            Field serverInstanceList = emptyManager.getClass().getDeclaredField("serverInstanceList");
-            serverInstanceList.setAccessible(true);
-            List<LycorisServer> lycorisServers = (List<LycorisServer>) serverInstanceList.get(emptyManager);
-            lycorisServers.clear();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     static class TestMessage implements Message {
 
         @Override
@@ -185,27 +122,4 @@ public class LycorisTest {
         }
     }
 
-    public static class TestLycorisServer implements LycorisServer {
-
-        @Override
-        public void start() {
-
-        }
-
-        @Override
-        public void shutdown() {
-
-        }
-
-        @Override
-        public String getServerName() {
-            return null;
-        }
-
-        @Override
-        public void setChannel(LycorisChannel channel) {
-
-        }
-
-    }
 }

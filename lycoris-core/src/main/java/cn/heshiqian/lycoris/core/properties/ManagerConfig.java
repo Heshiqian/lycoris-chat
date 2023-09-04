@@ -33,9 +33,4 @@ public class ManagerConfig extends AbstractLycorisProperty{
         configurations.put(PROP_KEY_TARGET_SERVER, readPropertyValue(properties, PROP_KEY_TARGET_SERVER, Function.identity()));
     }
 
-    @Override
-    public void load(String configStr) {
-        load(loadFromString(configStr));
-    }
-
 }
