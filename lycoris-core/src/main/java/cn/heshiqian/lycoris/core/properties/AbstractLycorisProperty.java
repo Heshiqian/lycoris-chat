@@ -55,6 +55,10 @@ public abstract class AbstractLycorisProperty implements LycorisProperty{
         return parser.apply(property);
     }
 
+    protected boolean fuzzyBooleanValue(String strValue) {
+        return "true".equalsIgnoreCase(strValue) || "on".equalsIgnoreCase(strValue);
+    }
+
     @Override
     public void set(String key, Object propValue) {
         configurations.put(key, propValue);
