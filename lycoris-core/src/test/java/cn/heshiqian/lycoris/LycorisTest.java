@@ -4,10 +4,14 @@ import cn.heshiqian.lycoris.core.message.Message;
 import cn.heshiqian.lycoris.core.message.MessageType;
 import cn.heshiqian.lycoris.core.message.Messenger;
 import cn.heshiqian.lycoris.core.properties.ManagerConfig;
+import cn.heshiqian.lycoris.core.util.stream.NoClosableInputStream;
+import cn.heshiqian.lycoris.core.util.stream.NoClosableOutputStream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Properties;
 
@@ -86,40 +90,24 @@ public class LycorisTest {
 
     }
 
-    static class TestMessage implements Message {
+    @Test
+    public void testNoClosableStreamWhenOnCloseCalledDoesNotThrow() {
+        InputStream inputStream = new NoClosableInputStream(InputStream.nullInputStream());
+        OutputStream outputStream = new NoClosableOutputStream(OutputStream.nullOutputStream());
+        Assertions.assertDoesNotThrow(inputStream::close);
+        Assertions.assertDoesNotThrow(outputStream::close);
+    }
 
-        @Override
-        public Messenger getFrom() {
-            return Messenger.of("alice", "192.168.1.2");
-        }
-
-        @Override
-        public Messenger getTo() {
-            return Messenger.of("bob", "192.168.1.3");
-        }
-
-        @Override
-        public MessageType getType() {
-            return new TestMessageType();
-        }
-
-        static class TestMessageType implements MessageType {
-
-            @Override
-            public String getStringType() {
-                return "test";
-            }
-
-            @Override
-            public int getIntType() {
-                return 0;
-            }
-
-            @Override
-            public byte[] getByteType() {
-                return new byte[]{0x00,0x00,0x00,0x00};
-            }
-        }
+    @Test
+    public void testNoClosableStreamWhenOnCloseCalledThrowException() {
+        InputStream inputStream = new NoClosableInputStream(InputStream.nullInputStream());
+        OutputStream outputStream = new NoClosableOutputStream(OutputStream.nullOutputStream());
+        Assertions.assertNotNull(inputStream);
+        Assertions.assertNotNull(outputStream);
+        // This test need go to 'cn/heshiqian/lycoris/core/util/stream/package-info.java'
+        // To set 'cn.heshiqian.lycoris.core.util.stream.CloseMethodPolicy#thrown' is true
+        // Assertions.assertThrows(RuntimeException.class, inputStream::close);
+        // Assertions.assertThrows(RuntimeException.class, outputStream::close);
     }
 
 }

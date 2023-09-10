@@ -10,11 +10,11 @@ import cn.heshiqian.lycoris.core.properties.ServerConfig;
  */
 public abstract class NetworkLycorisServer extends AbstractLycorisServer implements NetworkServerLifecycle {
 
-
-
     public NetworkLycorisServer(ServerConfig serverConfig) {
         super(serverConfig);
     }
+
+
 
     @Override
     public void start() {

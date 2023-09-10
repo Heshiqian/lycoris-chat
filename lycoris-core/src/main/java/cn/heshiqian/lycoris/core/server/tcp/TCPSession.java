@@ -2,7 +2,6 @@ package cn.heshiqian.lycoris.core.server.tcp;
 
 import cn.heshiqian.lycoris.core.session.Session;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -11,7 +10,6 @@ import lombok.Setter;
  * @since 2023/9/8
  */
 @AllArgsConstructor
-@RequiredArgsConstructor
 @Setter
 public class TCPSession implements Session {
 

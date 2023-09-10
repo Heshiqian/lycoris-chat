@@ -1,9 +1,13 @@
 package cn.heshiqian.lycoris.core.server.tcp;
 
 import cn.heshiqian.lycoris.core.server.NetworkLycorisServer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author Heshiqian
@@ -11,6 +15,8 @@ import java.net.ServerSocket;
  * @since 2023/9/7
  */
 public class TCPLycorisServer extends NetworkLycorisServer {
+
+    private static final Logger logger = LoggerFactory.getLogger(TCPLycorisServer.class);
 
     private boolean createFlag = false;
     private TCPServerThread tcpServerThread;
@@ -67,14 +73,31 @@ public class TCPLycorisServer extends NetworkLycorisServer {
 
     static class TCPServerThread extends Thread {
 
-        public TCPServerThread(ServerSocket serverSocket) {
+        AtomicBoolean loop = new AtomicBoolean(true);
 
+        ServerSocket serverSocket;
+
+        public TCPServerThread(ServerSocket serverSocket) {
+            this.serverSocket = serverSocket;
         }
 
         @Override
         public void run() {
+            while (loop.get()) {
+                Socket accept = null;
+                try {
+                    // Blocked
+                    accept = serverSocket.accept();
+                    // Need to notice upper level to handle connect
 
 
+
+
+                } catch (IOException e) {
+                    // Abandon this connection
+                    logger.debug("Connection was abandoned.", e);
+                }
+            }
         }
     }
 
