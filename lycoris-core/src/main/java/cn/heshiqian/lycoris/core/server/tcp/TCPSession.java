@@ -1,6 +1,7 @@
 package cn.heshiqian.lycoris.core.server.tcp;
 
 import cn.heshiqian.lycoris.core.session.Session;
+import cn.heshiqian.lycoris.core.session.SessionConnection;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 
@@ -30,5 +31,10 @@ public class TCPSession implements Session {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public SessionConnection getConnection() {
+        return null;
     }
 }

@@ -15,8 +15,6 @@ public interface Session extends Serializable {
 
     String getName();
 
-
-
-
+    SessionConnection getConnection();
 
 }

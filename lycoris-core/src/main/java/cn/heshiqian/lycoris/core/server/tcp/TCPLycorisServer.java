@@ -1,12 +1,18 @@
 package cn.heshiqian.lycoris.core.server.tcp;
 
 import cn.heshiqian.lycoris.core.server.NetworkLycorisServer;
+import cn.heshiqian.lycoris.core.session.Session;
+import cn.heshiqian.lycoris.core.session.SessionConnectionInfo;
+import cn.heshiqian.lycoris.core.session.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -17,6 +23,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class TCPLycorisServer extends NetworkLycorisServer {
 
     private static final Logger logger = LoggerFactory.getLogger(TCPLycorisServer.class);
+
+    private static final SessionFactory tcpSessionFactory = TCPSessionFactory.getInstance();
 
     private boolean createFlag = false;
     private TCPServerThread tcpServerThread;
@@ -65,9 +73,7 @@ public class TCPLycorisServer extends NetworkLycorisServer {
             // Theoretically, this operate can raise client's handle count up to Integer.MAX_VALUE max.
             ServerSocket serverSocket = new ServerSocket(serverPort, Integer.MAX_VALUE);
             tcpServerThread = new TCPServerThread(serverSocket);
-
-
-
+            tcpServerThread.start();
         }
     }
 
@@ -82,6 +88,16 @@ public class TCPLycorisServer extends NetworkLycorisServer {
         }
 
         @Override
+        public void start() {
+            logger.debug("[TCP] TCP Server is start. port:[{}] bind:[{} --> {}]",
+                    serverSocket.getLocalPort(),
+                    Arrays.toString(serverSocket.getInetAddress().getAddress()),
+                    serverSocket.getInetAddress().getHostAddress()
+            );
+            super.start();
+        }
+
+        @Override
         public void run() {
             while (loop.get()) {
                 Socket accept = null;
@@ -89,6 +105,11 @@ public class TCPLycorisServer extends NetworkLycorisServer {
                     // Blocked
                     accept = serverSocket.accept();
                     // Need to notice upper level to handle connect
+                    SessionConnectionInfo sessionConnectionInfo = new SessionConnectionInfo();
+                    sessionConnectionInfo.setAddress(accept.getInetAddress().getHostAddress());
+                    sessionConnectionInfo.setIpAddress(((InetSocketAddress)accept.getRemoteSocketAddress()).getAddress().getAddress());
+
+                    Session session = tcpSessionFactory.buildSession(sessionConnectionInfo);
 
 
 

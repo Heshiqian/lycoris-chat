@@ -14,16 +14,17 @@ public abstract class NetworkLycorisServer extends AbstractLycorisServer impleme
         super(serverConfig);
     }
 
-
-
     @Override
     public void start() {
-
+        onServerCreate();
+        onServerStart();
     }
 
     @Override
     public void shutdown() {
-
+        onServerShutdown();
+        onServerClose();
+        onServerDestroy();
     }
 
 }

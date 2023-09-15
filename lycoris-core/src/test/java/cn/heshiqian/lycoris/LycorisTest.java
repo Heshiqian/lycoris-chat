@@ -4,14 +4,21 @@ import cn.heshiqian.lycoris.core.message.Message;
 import cn.heshiqian.lycoris.core.message.MessageType;
 import cn.heshiqian.lycoris.core.message.Messenger;
 import cn.heshiqian.lycoris.core.properties.ManagerConfig;
+import cn.heshiqian.lycoris.core.server.tcp.TCPLycorisServer;
+import cn.heshiqian.lycoris.core.server.tcp.TCPServerConfig;
+import cn.heshiqian.lycoris.core.session.impl.ReactiveSessionReader;
 import cn.heshiqian.lycoris.core.util.stream.NoClosableInputStream;
 import cn.heshiqian.lycoris.core.util.stream.NoClosableOutputStream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.Socket;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Properties;
 
@@ -38,35 +45,6 @@ public class LycorisTest {
         helloScreen();
     }
 
-    @Test
-    public void testManuallyNewInstanceOfMessage() {
-        TestMessage testMessage = new TestMessage();
-        Assertions.assertNotNull(testMessage);
-        System.out.println("testMessage = " + testMessage);
-
-        Messenger from = testMessage.getFrom();
-        Messenger to = testMessage.getTo();
-        Assertions.assertNotNull(from);
-        Assertions.assertNotNull(to);
-
-        System.out.println("testMessage.getFrom() = " + from);
-        System.out.println("testMessage.getTo() = " + to);
-
-        System.out.println("\tfrom.getUri() = " + from.getLocation());
-        System.out.println("\tto.getUri() = " + to.getLocation());
-
-        MessageType messageType = testMessage.getType();
-        Assertions.assertNotNull(messageType);
-
-        System.out.println("messageType = " + messageType);
-        byte[] byteType = messageType.getByteType();
-        String stringType = messageType.getStringType();
-        int intType = messageType.getIntType();
-        System.out.println("\tstringType = " + stringType);
-        System.out.println("\tintType = " + intType);
-        System.out.println("\tbyteType = " + Arrays.toString(byteType));
-
-    }
 
     @Test
     public void testLycorisPropertyCanLoadCorrect() {
@@ -110,4 +88,26 @@ public class LycorisTest {
         // Assertions.assertThrows(RuntimeException.class, outputStream::close);
     }
 
+    @Test
+    public void testTCPServer() throws Exception{
+        TCPServerConfig tcpServerConfig = new TCPServerConfig();
+        tcpServerConfig.load("");
+        TCPLycorisServer tcpLycorisServer = new TCPLycorisServer(tcpServerConfig);
+        tcpLycorisServer.start();
+        Thread.sleep(Duration.ofDays(1).toMillis());
+    }
+
+    @Test
+    public void testReader() throws Exception{
+        Socket socket = new Socket("127.0.0.1", 322);
+        ReactiveSessionReader reader = new ReactiveSessionReader(socket.getInputStream());
+
+        while (true) {
+            if (reader.hasMore()) {
+                System.err.println("reader.read() = " + new String(reader.read()));
+                continue;
+            }
+            Thread.sleep(200);
+        }
+    }
 }
