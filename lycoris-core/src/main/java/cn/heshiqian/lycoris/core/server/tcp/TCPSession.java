@@ -1,8 +1,7 @@
 package cn.heshiqian.lycoris.core.server.tcp;
 
 import cn.heshiqian.lycoris.core.session.Session;
-import cn.heshiqian.lycoris.core.session.SessionConnection;
-import lombok.AllArgsConstructor;
+import cn.heshiqian.lycoris.core.server.connection.LycorisConnection;
 import lombok.Setter;
 
 /**
@@ -10,13 +9,24 @@ import lombok.Setter;
  * @version 1.0.0
  * @since 2023/9/8
  */
-@AllArgsConstructor
 @Setter
 public class TCPSession implements Session {
 
     private final String address;
     private final String id;
     private final String name;
+
+    private final LycorisConnection lycorisConnection;
+
+    public TCPSession(String address,
+                      String id,
+                      String name,
+                      LycorisConnection lycorisConnection) {
+        this.address = address;
+        this.id = id;
+        this.name = name;
+        this.lycorisConnection = lycorisConnection;
+    }
 
     @Override
     public String getAddress() {
@@ -34,7 +44,8 @@ public class TCPSession implements Session {
     }
 
     @Override
-    public SessionConnection getConnection() {
-        return null;
+    public LycorisConnection getConnection() {
+        return lycorisConnection;
     }
+
 }

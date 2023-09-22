@@ -1,6 +1,7 @@
 package cn.heshiqian.lycoris.core.server;
 
 import cn.heshiqian.lycoris.core.properties.ServerConfig;
+import cn.heshiqian.lycoris.core.session.SessionManager;
 
 /**
  * This is ALL network protocol server's parent class, to provide full network activity lifecycle.
@@ -27,4 +28,8 @@ public abstract class NetworkLycorisServer extends AbstractLycorisServer impleme
         onServerDestroy();
     }
 
+    @Override
+    public SessionManager getSessionManager() {
+        return null;
+    }
 }

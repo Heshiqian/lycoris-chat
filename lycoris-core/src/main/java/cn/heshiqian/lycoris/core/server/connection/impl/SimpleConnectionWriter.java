@@ -1,6 +1,6 @@
-package cn.heshiqian.lycoris.core.session.impl;
+package cn.heshiqian.lycoris.core.server.connection.impl;
 
-import cn.heshiqian.lycoris.core.session.SessionWriter;
+import cn.heshiqian.lycoris.core.server.connection.ConnectionWriter;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -10,11 +10,11 @@ import java.io.OutputStream;
  * @version 1.0.0
  * @since 2023/9/15
  */
-public class SimpleSessionWriter implements SessionWriter {
+public class SimpleConnectionWriter implements ConnectionWriter {
 
     private final OutputStream out;
 
-    public SimpleSessionWriter(OutputStream out) {
+    public SimpleConnectionWriter(OutputStream out) {
         this.out = out;
     }
 

@@ -1,6 +1,7 @@
 package cn.heshiqian.lycoris.core.server;
 
 import cn.heshiqian.lycoris.core.channel.LycorisChannel;
+import cn.heshiqian.lycoris.core.session.SessionManager;
 
 /**
  * <p>The top-level Lycoris-Chat server interface, provide method to control server and named server.</p>
@@ -25,6 +26,12 @@ public interface LycorisServer {
      * @return this server name
      */
     String getServerName();
+
+    /**
+     * Get this server session manager.
+     * @return session manager
+     */
+    SessionManager getSessionManager();
 
     /**
      * <p>Set {@link LycorisChannel} channel to this server, provided async data/event transport.</p>

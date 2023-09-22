@@ -1,25 +1,19 @@
 package cn.heshiqian.lycoris;
 
-import cn.heshiqian.lycoris.core.message.Message;
-import cn.heshiqian.lycoris.core.message.MessageType;
-import cn.heshiqian.lycoris.core.message.Messenger;
 import cn.heshiqian.lycoris.core.properties.ManagerConfig;
 import cn.heshiqian.lycoris.core.server.tcp.TCPLycorisServer;
 import cn.heshiqian.lycoris.core.server.tcp.TCPServerConfig;
-import cn.heshiqian.lycoris.core.session.impl.ReactiveSessionReader;
+import cn.heshiqian.lycoris.core.server.connection.impl.ReactiveConnectionReader;
 import cn.heshiqian.lycoris.core.util.stream.NoClosableInputStream;
 import cn.heshiqian.lycoris.core.util.stream.NoClosableOutputStream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.Properties;
 
 /**
@@ -100,7 +94,7 @@ public class LycorisTest {
     @Test
     public void testReader() throws Exception{
         Socket socket = new Socket("127.0.0.1", 322);
-        ReactiveSessionReader reader = new ReactiveSessionReader(socket.getInputStream());
+        ReactiveConnectionReader reader = new ReactiveConnectionReader(socket.getInputStream());
 
         while (true) {
             if (reader.hasMore()) {
