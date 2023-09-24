@@ -13,6 +13,7 @@
     </description>
     <modules>
         <module>lycoris-core</module>
+        <module>lycoris-module-server-tcp</module>
     </modules>
 
     <properties>
@@ -69,6 +70,13 @@
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
                 <version>1.4.11</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>cn.heshiqian</groupId>
+                <artifactId>lycoris-core</artifactId>
+                <version>1.0.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

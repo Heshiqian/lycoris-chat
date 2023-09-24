@@ -5,4 +5,4 @@
  * @version 1.0.0
  * @since 2023/9/21
  */
-package cn.heshiqian.lycoris.core.server.tcp;
+package cn.heshiqian.lycoris.module.server.tcp;

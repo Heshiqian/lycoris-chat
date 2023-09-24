@@ -1,8 +1,6 @@
 package cn.heshiqian.lycoris;
 
 import cn.heshiqian.lycoris.core.properties.ManagerConfig;
-import cn.heshiqian.lycoris.core.server.tcp.TCPLycorisServer;
-import cn.heshiqian.lycoris.core.server.tcp.TCPServerConfig;
 import cn.heshiqian.lycoris.core.server.connection.impl.ReactiveConnectionReader;
 import cn.heshiqian.lycoris.core.util.stream.NoClosableInputStream;
 import cn.heshiqian.lycoris.core.util.stream.NoClosableOutputStream;
@@ -82,26 +80,4 @@ public class LycorisTest {
         // Assertions.assertThrows(RuntimeException.class, outputStream::close);
     }
 
-    @Test
-    public void testTCPServer() throws Exception{
-        TCPServerConfig tcpServerConfig = new TCPServerConfig();
-        tcpServerConfig.load("");
-        TCPLycorisServer tcpLycorisServer = new TCPLycorisServer(tcpServerConfig);
-        tcpLycorisServer.start();
-        Thread.sleep(Duration.ofDays(1).toMillis());
-    }
-
-    @Test
-    public void testReader() throws Exception{
-        Socket socket = new Socket("127.0.0.1", 322);
-        ReactiveConnectionReader reader = new ReactiveConnectionReader(socket.getInputStream());
-
-        while (true) {
-            if (reader.hasMore()) {
-                System.err.println("reader.read() = " + new String(reader.read()));
-                continue;
-            }
-            Thread.sleep(200);
-        }
-    }
 }

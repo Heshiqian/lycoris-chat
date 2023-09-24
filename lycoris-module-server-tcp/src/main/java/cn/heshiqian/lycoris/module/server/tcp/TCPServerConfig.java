@@ -1,4 +1,4 @@
-package cn.heshiqian.lycoris.core.server.tcp;
+package cn.heshiqian.lycoris.module.server.tcp;
 
 import cn.heshiqian.lycoris.core.properties.ServerConfig;
 import lombok.Getter;
