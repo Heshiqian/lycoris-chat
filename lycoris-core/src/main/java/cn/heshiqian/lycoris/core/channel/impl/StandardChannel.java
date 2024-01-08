@@ -1,5 +1,6 @@
 package cn.heshiqian.lycoris.core.channel.impl;
 
+import cn.heshiqian.lycoris.core.channel.ChannelData;
 import cn.heshiqian.lycoris.core.channel.ChannelTerminal;
 import cn.heshiqian.lycoris.core.channel.TickChannel;
 
@@ -39,19 +40,20 @@ public class StandardChannel extends TickChannel {
     }
 
     @Override
-    public void broadcast(int frequency, int level, byte[] data) {
+    public void broadcast(int frequency, int level, ChannelData<?> channelData) {
 
     }
 
     @Override
-    public void p2p(int terminalId, byte[] data) {
+    public void p2p(int terminalId, ChannelData<?> channelData) {
 
     }
 
     @Override
-    public void onData(byte[] data) {
+    public void onData(ChannelData<?> channelData) {
 
     }
+
 
     @Override
     protected void onStartBefore() {

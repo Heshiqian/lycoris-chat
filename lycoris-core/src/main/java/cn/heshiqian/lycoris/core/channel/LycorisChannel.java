@@ -1,7 +1,5 @@
 package cn.heshiqian.lycoris.core.channel;
 
-import cn.heshiqian.lycoris.core.channel.ChannelTerminal;
-
 /**
  * @author Heshiqian
  * @version 1.0.0
@@ -20,10 +18,10 @@ public interface LycorisChannel {
 
     void leave(int terminalId);
 
-    void broadcast(int frequency, int level, byte[] data);
+    void broadcast(int frequency, int level, ChannelData<?> channelData);
 
-    void p2p(int terminalId, byte[] data);
+    void p2p(int terminalId, ChannelData<?> channelData);
 
-    void onData(byte[] data);
+    void onData(ChannelData<?> channelData);
 
 }
