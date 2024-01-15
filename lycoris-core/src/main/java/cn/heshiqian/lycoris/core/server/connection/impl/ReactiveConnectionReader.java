@@ -87,7 +87,7 @@ public class ReactiveConnectionReader implements ConnectionReader {
         try {
             exceptionThrown();
         } catch (IOException e) {
-            // warp with RuntimeException, for don't need to modify method signature.
+            // wrap with RuntimeException, because don't need to modify method's signature.
             throw new RuntimeException(e);
         }
         return !waitList.isEmpty();

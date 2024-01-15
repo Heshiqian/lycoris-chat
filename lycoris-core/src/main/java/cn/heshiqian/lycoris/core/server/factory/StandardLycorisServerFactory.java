@@ -13,6 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Parameter;
+import java.util.Arrays;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -58,9 +62,29 @@ public class StandardLycorisServerFactory implements LycorisServerFactory {
         workerManager.joinCore(standardChannel);
 
         try {
-            Constructor<? extends LycorisServer> constructor = serverType.getConstructor(ServerConfig.class);
-        } catch (NoSuchMethodException e) {
-            throw new LycorisServerException("");
+            Constructor<?>[] constructors = serverType.getConstructors();
+            Optional<? extends Class<?>> anyExistsConstructor = Arrays.stream(constructors)
+                    .filter(constructor -> constructor.getParameterCount() == 1)
+                    .filter(constructor -> ServerConfig.class.isAssignableFrom(constructor.getParameters()[0].getType()))
+                    .map(constructor -> constructor.getParameters()[0])
+                    .map(Parameter::getType)
+                    .findAny();
+
+            if (anyExistsConstructor.isPresent()) {
+                Class<?> configClass = anyExistsConstructor.get();
+
+                Constructor<?> configClassConstructor = configClass.getConstructor();
+                ServerConfig configObj = (ServerConfig) configClassConstructor.newInstance();
+                configObj.load(properties);
+
+                Constructor<? extends LycorisServer> constructor = serverType.getConstructor(configClass);
+                this.server = constructor.newInstance(configObj);
+                this.server.setChannel(standardChannel);
+            } else {
+                throw new NoSuchMethodException("Not found any constructor with Class<? extends cn.heshiqian.lycoris.core.properties.ServerConfig>");
+            }
+        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            throw new LycorisServerException("Init server failure.", e);
         }
 
     }

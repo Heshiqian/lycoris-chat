@@ -43,7 +43,7 @@ public class WorkerManager {
 
     public void joinLooper(Runnable runnable) {
         if (!mainLooper.isAlive() && loopStatus.get() <= 1) {
-
+            mainLooper.start();
         }
     }
 

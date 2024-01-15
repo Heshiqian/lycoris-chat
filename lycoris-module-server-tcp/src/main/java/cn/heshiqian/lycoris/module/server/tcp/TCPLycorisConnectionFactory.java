@@ -29,10 +29,10 @@ public class TCPLycorisConnectionFactory implements LycorisConnectionFactory {
     }
 
     public static LycorisConnectionFactory getInstance() {
-        return TCPSessionFactoryHolder.sessionFactory;
+        return TCPLycorisConnectionFactoryHolder.LYCORIS_CONNECTION_FACTORY;
     }
 
-    private static class TCPSessionFactoryHolder {
-        private static final TCPLycorisConnectionFactory sessionFactory = new TCPLycorisConnectionFactory();
+    private static class TCPLycorisConnectionFactoryHolder {
+        private static final TCPLycorisConnectionFactory LYCORIS_CONNECTION_FACTORY = new TCPLycorisConnectionFactory();
     }
 }

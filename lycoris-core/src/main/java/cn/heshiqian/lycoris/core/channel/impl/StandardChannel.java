@@ -17,15 +17,22 @@ public class StandardChannel extends TickChannel {
     private static final String CHANNEL_PREFIX = "standard-channel-";
     private static final AtomicInteger nameId = new AtomicInteger(1);
 
-    private final String channelId;
+    private String channelId;
 
     public StandardChannel() {
         super(STANDARD_TICK);
-        channelId = CHANNEL_PREFIX + nameId.getAndIncrement();
     }
 
     @Override
     public String channelId() {
+        lock.lock();
+        try {
+            if (channelId == null) {
+                channelId = CHANNEL_PREFIX + nameId.getAndIncrement();
+            }
+        } finally {
+            lock.unlock();
+        }
         return channelId;
     }
 
@@ -63,6 +70,6 @@ public class StandardChannel extends TickChannel {
     @Override
     protected void tick() {
         // 1000ms / 20tick = 50ms/tick
-        
+
     }
 }

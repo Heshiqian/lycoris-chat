@@ -20,8 +20,8 @@ public final class LycorisPropertyFinder {
 
     private static final Logger logger = LoggerFactory.getLogger(LycorisPropertyFinder.class);
 
-    private static final String PROPERTY_FILENAME = "lycoris.property";
-    private static final String CLASSPATH_PROPERTY = "/" + PROPERTY_FILENAME;
+    private static final String PROPERTY_FILENAME = "lycoris.properties";
+    private static final String CLASSPATH_PROPERTY = PROPERTY_FILENAME;
 
     public static Properties findProperties() {
 

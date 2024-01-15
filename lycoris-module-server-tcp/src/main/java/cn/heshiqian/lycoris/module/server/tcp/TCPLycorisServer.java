@@ -1,5 +1,6 @@
 package cn.heshiqian.lycoris.module.server.tcp;
 
+import cn.heshiqian.lycoris.core.exception.LycorisServerException;
 import cn.heshiqian.lycoris.core.server.NetworkLycorisServer;
 import cn.heshiqian.lycoris.core.server.connection.LycorisConnection;
 import cn.heshiqian.lycoris.core.server.connection.LycorisConnectionFactory;
@@ -32,6 +33,7 @@ public class TCPLycorisServer extends NetworkLycorisServer {
     public void onServerCreate() {
         try {
             createTcpSocketWithJava();
+            createFlag = true;
         } catch (IOException e) {
             throw new TCPLycorisServerException("Create the tpc server fail. reason: " + e.getMessage(), e);
         }
@@ -39,7 +41,9 @@ public class TCPLycorisServer extends NetworkLycorisServer {
 
     @Override
     public void onServerStart() {
-
+        if (!createFlag) {
+            throw new TCPLycorisServerException("TCP server not create, or created not success.");
+        }
         if (tcpServerThread != null && !tcpServerThread.isAlive()) {
             tcpServerThread.start();
         }
@@ -57,7 +61,7 @@ public class TCPLycorisServer extends NetworkLycorisServer {
 
     @Override
     public void onServerDestroy() {
-
+        createFlag = false;
     }
 
     private TCPServerConfig getTCPServerConfig() {

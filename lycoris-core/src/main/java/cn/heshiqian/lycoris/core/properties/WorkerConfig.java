@@ -1,5 +1,7 @@
 package cn.heshiqian.lycoris.core.properties;
 
+import cn.heshiqian.lycoris.core.exception.CannotParsePropertyException;
+import cn.heshiqian.lycoris.core.exception.LycorisServerException;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -38,23 +40,23 @@ public class WorkerConfig extends AbstractLycorisProperty{
             try {
                 return Integer.parseInt(numberStr);
             } catch (NumberFormatException e) {
-                return DEFAULT_MAX;
+                throw new CannotParsePropertyException(PROP_KEY_WORKER_CORE_SIZE + " is not a integer number", e);
             }
-        });
+        }, () -> DEFAULT_MAX);
         workerMax = readPropertyValue(properties, PROP_KEY_WORKER_MAX, numberStr -> {
             try {
                 return Integer.parseInt(numberStr);
             } catch (NumberFormatException e) {
-                return DEFAULT_MAX;
+                throw new CannotParsePropertyException(PROP_KEY_WORKER_CORE_SIZE + " is not a integer number", e);
             }
-        });
+        }, () -> DEFAULT_MAX);
         workerTimeout = readPropertyValue(properties, PROP_KEY_WORKER_TIMEOUT, numberStr -> {
             try {
                 return Integer.parseInt(numberStr);
             } catch (NumberFormatException e) {
-                return DEFAULT_TIMEOUT;
+                throw new CannotParsePropertyException(PROP_KEY_WORKER_CORE_SIZE + " is not a integer number", e);
             }
-        });
+        }, () -> DEFAULT_TIMEOUT);
     }
 
 }
