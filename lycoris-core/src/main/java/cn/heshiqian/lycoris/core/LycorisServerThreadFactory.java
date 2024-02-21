@@ -1,8 +1,7 @@
-package cn.heshiqian.lycoris.core.server;
+package cn.heshiqian.lycoris.core;
 
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Supplier;
 
 /**
  * @author Heshiqian

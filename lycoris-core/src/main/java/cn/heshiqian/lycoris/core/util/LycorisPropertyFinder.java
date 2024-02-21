@@ -23,7 +23,7 @@ public final class LycorisPropertyFinder {
     private static final String PROPERTY_FILENAME = "lycoris.properties";
     private static final String CLASSPATH_PROPERTY = PROPERTY_FILENAME;
 
-    public static Properties findProperties() {
+    public static Properties findProperties(boolean useDefault) {
 
         String propertyStr = null;
 
@@ -33,14 +33,16 @@ public final class LycorisPropertyFinder {
             propertyStr = findInRuntimeFolder();
         }
 
-        if (propertyStr == null) {
+        if (propertyStr == null && !useDefault) {
             throw new CannotParsePropertyException("Not found property file in classpath or runtime folder.",
                     new FileNotFoundException(PROPERTY_FILENAME));
         }
 
         Properties properties = new Properties();
         try {
-            properties.load(new StringReader(propertyStr));
+            if (propertyStr != null) {
+                properties.load(new StringReader(propertyStr));
+            }
         } catch (IOException e) {
             throw new CannotParsePropertyException("Parse property file failure.", e);
         }

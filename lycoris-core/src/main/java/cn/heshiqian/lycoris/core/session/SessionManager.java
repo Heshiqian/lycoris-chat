@@ -13,5 +13,6 @@ public interface SessionManager {
 
     Session[] getSessions(String sessionName);
 
+    void removeSession(String sessionId);
 
 }

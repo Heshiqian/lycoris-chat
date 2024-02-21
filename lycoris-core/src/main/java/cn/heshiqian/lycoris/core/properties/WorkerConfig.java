@@ -14,9 +14,9 @@ import java.util.Properties;
  */
 @Getter
 @Setter
-public class WorkerConfig extends AbstractLycorisProperty{
+public class WorkerConfig extends AbstractLycorisProperty {
 
-    private static final int DEFAULT_MAX = 10;
+    private static final int DEFAULT_MAX = Runtime.getRuntime().availableProcessors();
     private static final int DEFAULT_TIMEOUT = 30_000;
     public static final String PROP_KEY_WORKER_CORE_SIZE = "lycoris.worker.core.size";
     public static final String PROP_KEY_WORKER_MAX = "lycoris.worker.max";

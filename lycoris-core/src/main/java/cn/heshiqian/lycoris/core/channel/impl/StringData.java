@@ -29,7 +29,7 @@ public class StringData implements ChannelData<String> {
     }
 
     @Override
-    public ChannelData<String> unserialize(Serializable serialData) {
+    public ChannelData<String> deserialize(Serializable serialData) {
         String string = guessType(String.class, serialData);
         if (string != null) return new StringData(string);
         // if is not string type, direct cast to byte[], because #serialize() method is return byte[].

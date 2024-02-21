@@ -1,4 +1,4 @@
-package cn.heshiqian.lycoris.core.server.connection;
+package cn.heshiqian.lycoris.core.connection;
 
 import java.io.IOException;
 import java.io.InputStream;

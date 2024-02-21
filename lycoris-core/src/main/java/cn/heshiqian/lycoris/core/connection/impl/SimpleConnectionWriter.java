@@ -1,6 +1,6 @@
-package cn.heshiqian.lycoris.core.server.connection.impl;
+package cn.heshiqian.lycoris.core.connection.impl;
 
-import cn.heshiqian.lycoris.core.server.connection.ConnectionWriter;
+import cn.heshiqian.lycoris.core.connection.ConnectionWriter;
 
 import java.io.IOException;
 import java.io.OutputStream;

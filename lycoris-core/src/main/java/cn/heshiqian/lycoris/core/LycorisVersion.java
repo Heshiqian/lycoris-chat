@@ -1,4 +1,4 @@
-package cn.heshiqian.lycoris;
+package cn.heshiqian.lycoris.core;
 
 /**
  * @author Heshiqian
@@ -9,7 +9,7 @@ public interface LycorisVersion {
 
     int MAIN_VERSION = 1;
 
-    int SUB_VERSION = 0;
+    int SUB_VERSION = 1;
 
     int RELEASE_TIMES = 0;
 

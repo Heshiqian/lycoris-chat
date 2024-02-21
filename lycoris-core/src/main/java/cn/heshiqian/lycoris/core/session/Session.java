@@ -1,6 +1,6 @@
 package cn.heshiqian.lycoris.core.session;
 
-import cn.heshiqian.lycoris.core.server.connection.LycorisConnection;
+import cn.heshiqian.lycoris.core.connection.LycorisConnection;
 
 import java.io.Serializable;
 

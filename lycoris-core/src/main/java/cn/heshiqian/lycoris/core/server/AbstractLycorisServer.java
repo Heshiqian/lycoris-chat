@@ -14,7 +14,6 @@ import java.util.Objects;
 public abstract class AbstractLycorisServer implements LycorisServer {
 
     protected final ServerConfig serverConfig;
-    protected LycorisChannel channel;
 
     public AbstractLycorisServer(ServerConfig serverConfig) {
         this.serverConfig = serverConfig;
@@ -25,9 +24,4 @@ public abstract class AbstractLycorisServer implements LycorisServer {
         return serverConfig.getServerName();
     }
 
-    @Override
-    public void setChannel(LycorisChannel channel) {
-        Objects.requireNonNull(channel, "Channel cannot be null");
-        this.channel = channel;
-    }
 }

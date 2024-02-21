@@ -1,6 +1,7 @@
 package cn.heshiqian.lycoris.core.server;
 
 import cn.heshiqian.lycoris.core.channel.LycorisChannel;
+import cn.heshiqian.lycoris.core.worker.LycorisWorker;
 import cn.heshiqian.lycoris.core.session.SessionManager;
 
 /**
@@ -33,12 +34,8 @@ public interface LycorisServer {
      */
     SessionManager getSessionManager();
 
-    /**
-     * <p>Set {@link LycorisChannel} channel to this server, provided async data/event transport.</p>
-     * <p>The channel created by factory producer, the factory must create channel and set channel to this server.
-     * Technically this method's parameter not allow {@code null} value.</p>
-     * @param channel A channel instance.
-     */
-    void setChannel(LycorisChannel channel);
+    LycorisWorker getWorker();
+
+    LycorisChannel getChannel();
 
 }

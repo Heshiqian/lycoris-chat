@@ -1,19 +1,17 @@
 package cn.heshiqian.lycoris.module.server.tcp;
 
-import cn.heshiqian.lycoris.core.exception.LycorisServerException;
+import cn.heshiqian.lycoris.core.channel.LycorisChannel;
+import cn.heshiqian.lycoris.core.channel.impl.StandardChannel;
+import cn.heshiqian.lycoris.core.properties.WorkerConfig;
 import cn.heshiqian.lycoris.core.server.NetworkLycorisServer;
-import cn.heshiqian.lycoris.core.server.connection.LycorisConnection;
-import cn.heshiqian.lycoris.core.server.connection.LycorisConnectionFactory;
-import cn.heshiqian.lycoris.core.server.connection.ConnectionInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import cn.heshiqian.lycoris.core.session.MemorySessionManager;
+import cn.heshiqian.lycoris.core.session.SessionManager;
+import cn.heshiqian.lycoris.core.util.LycorisPropertyFinder;
+import cn.heshiqian.lycoris.core.worker.LycorisWorker;
+import cn.heshiqian.lycoris.module.server.tcp.socket.TCPServerSocket;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.Properties;
 
 /**
  * @author Heshiqian
@@ -22,18 +20,21 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class TCPLycorisServer extends NetworkLycorisServer {
 
-    private static final Logger logger = LoggerFactory.getLogger(TCPLycorisServer.class);
 
-    private static final LycorisConnectionFactory connectionFactory = TCPLycorisConnectionFactory.getInstance();
+    private TCPServerSocket tcpServerSocket;
+    private LycorisWorker lycorisWorker;
+    private SessionManager sessionManager;
 
-    private boolean createFlag = false;
-    private TCPServerThread tcpServerThread;
+    public TCPLycorisServer(TCPServerConfig tcpServerConfig) {
+        super(tcpServerConfig);
+    }
 
     @Override
     public void onServerCreate() {
         try {
+            sessionManager = new MemorySessionManager();
+            createWorker();
             createTcpSocketWithJava();
-            createFlag = true;
         } catch (IOException e) {
             throw new TCPLycorisServerException("Create the tpc server fail. reason: " + e.getMessage(), e);
         }
@@ -41,16 +42,18 @@ public class TCPLycorisServer extends NetworkLycorisServer {
 
     @Override
     public void onServerStart() {
-        if (!createFlag) {
+        if (tcpServerSocket == null) {
             throw new TCPLycorisServerException("TCP server not create, or created not success.");
         }
-        if (tcpServerThread != null && !tcpServerThread.isAlive()) {
-            tcpServerThread.start();
-        }
+        tcpServerSocket.setOnConnectionConnect(connection -> {
+
+        });
+        getWorker().loopInMain(tcpServerSocket);
     }
 
     @Override
     public void onServerClose() {
+
 
     }
 
@@ -61,75 +64,40 @@ public class TCPLycorisServer extends NetworkLycorisServer {
 
     @Override
     public void onServerDestroy() {
-        createFlag = false;
+
     }
 
-    private TCPServerConfig getTCPServerConfig() {
-        return (TCPServerConfig) serverConfig;
+    private void createWorker() {
+        WorkerConfig workerConfig = new WorkerConfig();
+        Properties properties = LycorisPropertyFinder.findProperties(true);
+        workerConfig.load(properties);
+        lycorisWorker = new LycorisWorker(workerConfig);
     }
 
     private void createTcpSocketWithJava() throws IOException {
-        TCPServerConfig tcpServerConfig = getTCPServerConfig();
+        TCPServerConfig tcpServerConfig = (TCPServerConfig) serverConfig;
         int serverPort = tcpServerConfig.getServerPort();
         if (tcpServerConfig.isNio()) {
             // thrown not support;
             throw new UnsupportedOperationException("Not support NIO mode");
         } else {
-            // Set backlog size is max integer, which is prevented to masses clients connect to server socket queue is blocked.
-            // Theoretically, this operate can raise client's handle count up to Integer.MAX_VALUE max.
-            ServerSocket serverSocket = new ServerSocket(serverPort, Integer.MAX_VALUE);
-            tcpServerThread = new TCPServerThread(serverSocket);
+            tcpServerSocket = new TCPServerSocket(serverPort);
         }
     }
 
-    static class TCPServerThread extends Thread {
-
-        AtomicBoolean loop = new AtomicBoolean(true);
-
-        ServerSocket serverSocket;
-
-        public TCPServerThread(ServerSocket serverSocket) {
-            this.serverSocket = serverSocket;
-        }
-
-        @Override
-        public void start() {
-            logger.debug("[TCP] TCP Server is start. port:[{}] bind:[{} --> {}]",
-                    serverSocket.getLocalPort(),
-                    Arrays.toString(serverSocket.getInetAddress().getAddress()),
-                    serverSocket.getInetAddress().getHostAddress()
-            );
-            super.start();
-        }
-
-        @Override
-        public void run() {
-            while (loop.get()) {
-                Socket accept = null;
-                try {
-                    // Blocked
-                    accept = serverSocket.accept();
-                    // Need to notice upper level to handle connect
-                    ConnectionInfo connectionInfo = new ConnectionInfo(
-                            accept.getInetAddress().getHostAddress(),
-                            ((InetSocketAddress)accept.getRemoteSocketAddress()).getAddress().getAddress(),
-                            accept.getInputStream(),
-                            accept.getOutputStream()
-                            );
-
-                    LycorisConnection connection = connectionFactory.buildConnection(connectionInfo);
-
-
-
-                } catch (IOException e) {
-                    // Abandon this connection
-                    logger.debug("Connection was abandoned.", e);
-                }
-            }
-        }
+    @Override
+    public SessionManager getSessionManager() {
+        return sessionManager;
     }
 
-    public TCPLycorisServer(TCPServerConfig tcpServerConfig) {
-        super(tcpServerConfig);
+    @Override
+    public LycorisWorker getWorker() {
+        return lycorisWorker;
     }
+
+    @Override
+    public LycorisChannel getChannel() {
+        return new StandardChannel();
+    }
+
 }

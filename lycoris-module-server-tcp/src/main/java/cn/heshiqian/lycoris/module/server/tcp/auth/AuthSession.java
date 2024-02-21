@@ -1,6 +1,6 @@
 package cn.heshiqian.lycoris.module.server.tcp.auth;
 
-import cn.heshiqian.lycoris.core.server.connection.LycorisConnection;
+import cn.heshiqian.lycoris.core.connection.LycorisConnection;
 import lombok.Data;
 
 /**

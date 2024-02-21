@@ -1,11 +1,11 @@
 package cn.heshiqian.lycoris.module.server.tcp;
 
-import cn.heshiqian.lycoris.core.server.connection.ConnectionInfo;
-import cn.heshiqian.lycoris.core.server.connection.LycorisConnection;
-import cn.heshiqian.lycoris.core.server.connection.ConnectionReader;
-import cn.heshiqian.lycoris.core.server.connection.ConnectionWriter;
-import cn.heshiqian.lycoris.core.server.connection.impl.ReactiveConnectionReader;
-import cn.heshiqian.lycoris.core.server.connection.impl.SimpleConnectionWriter;
+import cn.heshiqian.lycoris.core.connection.ConnectionInfo;
+import cn.heshiqian.lycoris.core.connection.LycorisConnection;
+import cn.heshiqian.lycoris.core.connection.ConnectionReader;
+import cn.heshiqian.lycoris.core.connection.ConnectionWriter;
+import cn.heshiqian.lycoris.core.connection.impl.ReactiveConnectionReader;
+import cn.heshiqian.lycoris.core.connection.impl.SimpleConnectionWriter;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,19 +17,15 @@ import java.io.OutputStream;
  */
 public class TCPLycorisConnection implements LycorisConnection {
 
-    private final InputStream in;
-    private final OutputStream out;
     private final ReactiveConnectionReader reader;
     private final SimpleConnectionWriter writer;
 
     private final ConnectionInfo info;
 
-    public TCPLycorisConnection(InputStream in, OutputStream out, ConnectionInfo info) {
-        this.in = in;
-        this.out = out;
+    public TCPLycorisConnection(ConnectionInfo info) {
         this.info = info;
-        reader = new ReactiveConnectionReader(in);
-        writer = new SimpleConnectionWriter(out);
+        reader = new ReactiveConnectionReader(info.getIn());
+        writer = new SimpleConnectionWriter(info.getOut());
     }
 
     @Override
@@ -50,8 +46,8 @@ public class TCPLycorisConnection implements LycorisConnection {
     @Override
     public void close() {
         try {
-            in.close();
-            out.close();
+            info.getIn().close();
+            info.getOut().close();
         } catch (IOException ignore) { }
     }
 }

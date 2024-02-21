@@ -1,6 +1,6 @@
 package cn.heshiqian.lycoris.core.server.factory;
 
-import cn.heshiqian.lycoris.core.channel.WorkerManager;
+import cn.heshiqian.lycoris.core.worker.LycorisWorker;
 import cn.heshiqian.lycoris.core.channel.impl.StandardChannel;
 import cn.heshiqian.lycoris.core.exception.LycorisServerException;
 import cn.heshiqian.lycoris.core.exception.NotAvailableServerException;
@@ -47,19 +47,8 @@ public class StandardLycorisServerFactory implements LycorisServerFactory {
     }
 
     private void initServer() throws LycorisServerException{
-
-        // 1. create server channel
-        StandardChannel standardChannel = new StandardChannel();
-
-        // 2. find and load properties
-        Properties properties = LycorisPropertyFinder.findProperties();
-
-        WorkerConfig workerConfig = new WorkerConfig();
-        workerConfig.load(properties);
-
-        WorkerManager workerManager = new WorkerManager(workerConfig);
-
-        workerManager.joinCore(standardChannel);
+        // 1. find and load properties
+        Properties properties = LycorisPropertyFinder.findProperties(true);
 
         try {
             Constructor<?>[] constructors = serverType.getConstructors();
@@ -79,7 +68,6 @@ public class StandardLycorisServerFactory implements LycorisServerFactory {
 
                 Constructor<? extends LycorisServer> constructor = serverType.getConstructor(configClass);
                 this.server = constructor.newInstance(configObj);
-                this.server.setChannel(standardChannel);
             } else {
                 throw new NoSuchMethodException("Not found any constructor with Class<? extends cn.heshiqian.lycoris.core.properties.ServerConfig>");
             }

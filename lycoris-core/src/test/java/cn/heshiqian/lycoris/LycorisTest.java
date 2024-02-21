@@ -1,5 +1,6 @@
 package cn.heshiqian.lycoris;
 
+import cn.heshiqian.lycoris.core.LycorisVersion;
 import cn.heshiqian.lycoris.core.channel.ChannelData;
 import cn.heshiqian.lycoris.core.channel.impl.StringData;
 import cn.heshiqian.lycoris.core.properties.ManagerConfig;
@@ -129,7 +130,7 @@ public class LycorisTest {
         Serializable serializable = ref.get();
         Assertions.assertNotNull(serializable);
 
-        ChannelData<String> data = channelData.unserialize(serializable);
+        ChannelData<String> data = channelData.deserialize(serializable);
         System.out.println("data = " + data);
         System.out.println("data.getData() = " + data.getData());
 

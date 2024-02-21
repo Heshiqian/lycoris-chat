@@ -1,14 +1,10 @@
-package cn.heshiqian.lycoris.core.server.connection.impl;
+package cn.heshiqian.lycoris.core.connection.impl;
 
-import cn.heshiqian.lycoris.core.server.connection.ConnectionReader;
+import cn.heshiqian.lycoris.core.connection.ConnectionReader;
 import cn.heshiqian.lycoris.core.util.stream.CloseEventInputStream;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

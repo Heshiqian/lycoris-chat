@@ -8,7 +8,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @version 1.0.0
  * @since 2023/8/2
  */
-public abstract class TickChannel extends AbstractLycorisChannel implements Runnable{
+public abstract class TickChannel extends AbstractLycorisChannel implements Runnable {
 
     private static final Object waiter = new Object();
 

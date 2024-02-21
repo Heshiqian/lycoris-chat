@@ -13,7 +13,7 @@ public interface ChannelData<T extends Serializable> extends Serializable {
 
     Serializable serialize();
 
-    ChannelData<T> unserialize(Serializable serialData);
+    ChannelData<T> deserialize(Serializable serialData);
 
     default <GuessType> GuessType guessType(Class<GuessType> guessType, Serializable serializable) {
         Class<? extends Serializable> serializableClass = serializable.getClass();
