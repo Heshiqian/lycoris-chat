@@ -34,8 +34,4 @@ public interface LycorisServer {
      */
     SessionManager getSessionManager();
 
-    LycorisWorker getWorker();
-
-    LycorisChannel getChannel();
-
 }

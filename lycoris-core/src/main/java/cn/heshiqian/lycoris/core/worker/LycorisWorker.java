@@ -24,6 +24,8 @@ public class LycorisWorker {
     private static final int STATUS_RUNNING = 1;
     private static final int STATUS_SHUTDOWN = 2;
 
+    private static int workerId = 1;
+
     private final WorkerConfig workerConfig;
     private final AtomicInteger loopStatus = new AtomicInteger(0);
     private final ThreadPoolExecutor corePool;
@@ -78,7 +80,7 @@ public class LycorisWorker {
                 }
             }
         });
-        mainLooper.setName("lycoris-worker-main");
+        mainLooper.setName("lycoris-worker-main[" + (workerId++) + "]");
         mainLooper.start();
     }
 
